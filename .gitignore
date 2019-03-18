@@ -1,6 +1,6 @@
-
-# Created by https://www.gitignore.io/api/c,c++,visualstudio,visualstudiocode
-# Edit at https://www.gitignore.io/?templates=c,c++,visualstudio,visualstudiocode
+### Project specific ###
+# Built submodules
+submodules/build/ 
 
 ### C ###
 # Prerequisites
