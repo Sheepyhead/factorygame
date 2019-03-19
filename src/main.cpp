@@ -1,5 +1,6 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 
 void main()
 {
@@ -15,6 +16,12 @@ void main()
     sf::Sprite sprite;
     sprite.setTexture(texture);
 
+    sf::SoundBuffer soundBuffer;
+    soundBuffer.loadFromFile("..\\audio\\sound.wav");
+
+    sf::Sound sound;
+    sound.setBuffer(soundBuffer);
+
     while (window.isOpen())
     {
         static sf::Color backgroundColor = sf::Color::Black;
@@ -28,6 +35,7 @@ void main()
             {
                 if (event.key.code == sf::Keyboard::Space)
                 {
+                    sound.play();
                     backgroundColor = backgroundColor == sf::Color::Black ? sf::Color::Green : sf::Color::Black;
                 }
             }
