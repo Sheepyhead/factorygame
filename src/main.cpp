@@ -2,10 +2,21 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 
+#include "RenderComponent.hpp"
+#include "Entity.hpp"
+
+struct {
+    sf::RenderWindow *mainWindow;
+} Globals;
+
+void Render(sf::RenderWindow &window) {
+    RenderComponentSystem(window);
+}
+
 void main()
 {
     sf::RenderWindow window(sf::VideoMode(800, 600), "Hello World!");
-
+    Globals.mainWindow = &window;
     std::string fileName = "..\\graphics\\angery.png";
     sf::Texture texture;
     if (!texture.loadFromFile(fileName))
@@ -22,10 +33,15 @@ void main()
     sf::Sound sound;
     sound.setBuffer(soundBuffer);
 
+    sf::Event event;
+    Entity entity = CreateEntity();
+    RenderComponent component;
+    component.sprite = sprite;
+    AddComponent(entity, component);
+
     while (window.isOpen())
     {
         static sf::Color backgroundColor = sf::Color::Black;
-        sf::Event event;
 
         while (window.pollEvent(event))
         {
@@ -33,18 +49,20 @@ void main()
                 window.close();
             else if (event.type == sf::Event::KeyPressed)
             {
-                if (event.key.code == sf::Keyboard::Space)
+                switch (event.key.code)
                 {
+                case sf::Keyboard::Space:
                     sound.play();
-                    backgroundColor = backgroundColor == sf::Color::Black ? sf::Color::Green : sf::Color::Black;
+                    break;
+                case sf::Keyboard::Escape:
+                    window.close();
+                    break;
+                default:
+                    break;
                 }
             }
         }
 
-        window.clear(backgroundColor);
-
-        window.draw(sprite);
-
-        window.display();
+        Render(window);
     }
 }
