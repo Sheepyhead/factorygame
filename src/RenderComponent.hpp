@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <unordered_map>
 
+#include "TransformComponent.hpp"
 #include "Entity.hpp"
 
 struct RenderComponent
@@ -36,7 +37,8 @@ void RenderComponentSystem(sf::RenderWindow &window)
     for (const Entity &entity : Entities)
     {
         RenderComponent component = RenderComponents[entity];
-
+        TransformComponent component = TransformComponents[entity];
+        
         window.draw(component.sprite);
     }
     window.display();

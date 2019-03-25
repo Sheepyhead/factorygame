@@ -2,16 +2,15 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 
+#include "TransformComponent.hpp"
 #include "RenderComponent.hpp"
 #include "Entity.hpp"
+#include "System.hpp"
 
-struct {
+struct
+{
     sf::RenderWindow *mainWindow;
 } Globals;
-
-void Render(sf::RenderWindow &window) {
-    RenderComponentSystem(window);
-}
 
 void main()
 {
@@ -35,9 +34,16 @@ void main()
 
     sf::Event event;
     Entity entity = CreateEntity();
-    RenderComponent component;
-    component.sprite = sprite;
-    AddComponent(entity, component);
+
+    RenderComponent renderComponent;
+    renderComponent.sprite = sprite;
+    AddComponent(entity, renderComponent);
+
+    TransformComponent transformComponent;
+    transformComponent.X = 0;
+    transformComponent.Y = 0;
+    transformComponent.ZOrder = 0;
+    AddComponent(entity, transformComponent);
 
     while (window.isOpen())
     {
