@@ -12,13 +12,14 @@ struct RenderComponent
     sf::Sprite sprite;
 };
 
-namespace
+namespace __ENGINE__
 {
 std::unordered_map<Entity, RenderComponent> RenderComponents = [] {
     std::unordered_map<Entity, RenderComponent> map;
     return map;
 }();
 }
+using namespace __ENGINE__;
 
 void AddComponent(const Entity &entity, const RenderComponent &renderComponent)
 {
@@ -36,10 +37,25 @@ void RenderComponentSystem(sf::RenderWindow &window)
 
     for (const Entity &entity : Entities)
     {
-        RenderComponent component = RenderComponents[entity];
-        TransformComponent component = TransformComponents[entity];
+        RenderComponent renderComponent;
+        try {
+            renderComponent = RenderComponents.at(entity);
+        } catch (const std::out_of_range &exception) {
+            return;
+        }
+
+        TransformComponent transformComponent;
+        try // TODO: Extract this out into some kinda generic static function?
+        {
+            transformComponent = TransformComponents.at(entity);
+        }
+        catch (const std::out_of_range &exception)
+        {
+            // TODO: Define engine-specific exception set
+            return;
+        }
         
-        window.draw(component.sprite);
+        window.draw(renderComponent.sprite);
     }
     window.display();
 }
